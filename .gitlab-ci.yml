@@ -13,12 +13,12 @@ variables:
     --no-transfer-progress
     -DinstallAtEnd=true
     -DdeployAtEnd=true
-image: maven:3.8.7-eclipse-temurin-17-alpine
-cache:
-  paths:
-    - .m2/repository
 
 run_tests:
+  image: maven:3.8.7-eclipse-temurin-17-alpine
+  cache:
+  paths:
+    - .m2/repository
   script:
     - 'mvn $MAVEN_CLI_OPTS clean test'
   
