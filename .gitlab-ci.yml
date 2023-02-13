@@ -14,6 +14,9 @@ variables:
     -DinstallAtEnd=true
     -DdeployAtEnd=true
 
+  IMAGE_NAME: ' amsidhmicroservice/gitlab-project-demo'
+  IMAGE_TAG: '0.0.1-SNAPSHOT'
+
 run_tests:
   image: maven:3.8.7-eclipse-temurin-17-alpine
   cache:
@@ -21,6 +24,21 @@ run_tests:
       - .m2/repository
   script:
     - 'mvn $MAVEN_CLI_OPTS clean test'
+
+
+build_push_image:
+  image: docker:latest
+  services:
+    - docker:dind
+  variables:
+    DOCKER_TLS_CERTDIR: '/certs'
+  before_script:
+    - 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+  script:
+    - 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'
+    - 'docker push $IMAGE_NAME:$IMAGE_TAG'
+
+
   
 
 
