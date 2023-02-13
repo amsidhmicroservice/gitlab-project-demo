@@ -17,7 +17,12 @@ variables:
   IMAGE_NAME: ' amsidhmicroservice/gitlab-project-demo'
   IMAGE_TAG: '0.0.1-SNAPSHOT'
 
+stages:
+  - test
+  - build
+
 run_tests:
+  stage: test
   image: maven:3.8.7-eclipse-temurin-17-alpine
   cache:
     paths:
@@ -27,6 +32,7 @@ run_tests:
 
 
 build_push_image:
+  stage: build
   image: docker:latest
   services:
     - docker:dind
