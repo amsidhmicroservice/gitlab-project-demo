@@ -28,7 +28,7 @@ run_tests:
     paths:
       - .m2/repository
   script:
-    - 'mvn $MAVEN_CLI_OPTS clean test'
+    - 'mvn $MAVEN_CLI_OPTS clean verify'
 
 
 build_push_image:
