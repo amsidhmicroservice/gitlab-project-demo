@@ -61,5 +61,5 @@ docker_build_push_job:
 deploy_job:
   stage: deploy
   script:
-    - echo "Deploying gitlab-project-demo to OceanWorld"
+    - echo "Pending deployment of gitlab-project-demo to OceanWorld"
 
