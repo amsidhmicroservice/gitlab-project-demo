@@ -53,8 +53,13 @@ docker_build_push_job:
   before_script:
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
   script:
+    - echo "Building docker image"
     - docker build --pull -t "$IMAGE_NAME:$IMAGE_TAG" .
+    - echo "Pushing docker image to docker hub"
     - docker push "$IMAGE_NAME:$IMAGE_TAG"
 
 deploy_job:
   stage: deploy
+  script:
+    - echo "Deploying gitlab-project-demo to OceanWorld"
+
