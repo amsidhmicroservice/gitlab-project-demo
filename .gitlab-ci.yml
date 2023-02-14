@@ -2,8 +2,8 @@ image: maven:3.8.7-eclipse-temurin-17-alpine
 
 variables:
   MAVEN_OPTS: -Dmaven.repo.local=.m2/repository
-  IMAGE_NAME: ' amsidhmicroservice/gitlab-project-demo'
-  IMAGE_TAG: '0.0.1-SNAPSHOT'
+  IMAGE_NAME: amsidhmicroservice/gitlab-project-demo
+  IMAGE_TAG: 0.0.1-SNAPSHOT
 
 stages:
   - build
