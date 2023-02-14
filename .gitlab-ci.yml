@@ -43,7 +43,7 @@ package_job:
     - "mvn package"
 
 docker_build_push_job:
-  stage: docker_build
+  stage: docker_build_push
   image: docker:latest
   services:
     - docker:dind
