@@ -9,7 +9,7 @@ stages:
   - build
   - test
   - package
-  - deploy
+  - docker_build_push
 
 cache:
   paths:
@@ -42,9 +42,15 @@ package_job:
     - echo "Maven packaging started"
     - "mvn package"
 
-deploy_job:
-  stage: deploy
+docker_build_push_job:
+  stage: docker_build
+  image: docker:latest
+  services:
+    - docker:dind
   tags:
     - docker
+  before_script:
+    - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
   script:
-    - echo "Maven deploying started"
+    - docker build --pull -t "$IMAGE_NAME:$IMAGE_TAG" .
+    - docker push "$IMAGE_NAME:$IMAGE_TAG"
