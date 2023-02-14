@@ -10,13 +10,12 @@ stages:
   - test
   - package
   - docker_build_push
+  - deploy
 
 cache:
   paths:
     - .m2/repository
     - target
-
-
 
 build_job:
   stage: build
@@ -49,8 +48,13 @@ docker_build_push_job:
     - docker:dind
   tags:
     - docker
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
   before_script:
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
   script:
     - docker build --pull -t "$IMAGE_NAME:$IMAGE_TAG" .
     - docker push "$IMAGE_NAME:$IMAGE_TAG"
+
+deploy_job:
+  stage: deploy
