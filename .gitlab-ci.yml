@@ -1,51 +1,17 @@
 variables:
-  MAVEN_OPTS: >-
-    -Dhttps.protocols=TLSv1.2
-    -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository
-    -Dorg.slf4j.simpleLogger.showDateTime=true
-    -Djava.awt.headless=true
-
-  MAVEN_CLI_OPTS: >-
-    --batch-mode
-    --errors
-    --fail-at-end
-    --show-version
-    --no-transfer-progress
-    -DinstallAtEnd=true
-    -DdeployAtEnd=true
-
-  IMAGE_NAME: ' amsidhmicroservice/gitlab-project-demo'
+  IMAGE_NAME: 'amsidhmicroservice/gitlab-project-demo'
   IMAGE_TAG: '0.0.1-SNAPSHOT'
-
-stages:
-  - test
-  - build
-
-run_tests:
-  stage: test
-  image: maven:3.8.7-eclipse-temurin-17-alpine
-  cache:
-    paths:
-      - .m2/repository
-  script:
-    - 'mvn $MAVEN_CLI_OPTS clean verify'
-
-
-build_push_image:
+docker-build:
+  # Use the official docker image.
+  image: docker:latest
   stage: build
-  image: docker:20.10.16
   services:
-    - docker:20.10.16-dind
-  variables:
-    DOCKER_TLS_CERTDIR: '/certs'
+    - docker:dind
   before_script:
-    - 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+    - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+  # Default branch leaves tag empty (= latest tag)
+  # All other branches are tagged with the escaped branch name (commit ref slug)
   script:
-    - 'ls -al'
-    - 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'
-    - 'docker push $IMAGE_NAME:$IMAGE_TAG'
-
-
+    - docker build --pull -t "$IMAGE_NAME:$IMAGE_TAG" .
+    - docker push "$IMAGE_NAME:$IMAGE_TAG"
   
-
-
