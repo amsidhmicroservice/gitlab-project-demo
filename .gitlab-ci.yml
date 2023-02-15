@@ -60,9 +60,12 @@ docker_build_push_job:
 
 deploy_job:
   stage: deploy
-  image: adoptopenjdk/openjdk14:alpine-slim
+  image: docker:latest
+  services:
+    - docker:dind
+  tags:
+    - docker
   before_script:
-    - apt-get update && apt-get install openssh-client
     - chmod 400 $SSH_LOCAL_PRIVATE_KEY
   script:
     - echo "Deploying gitlab-project-demo using docker"
