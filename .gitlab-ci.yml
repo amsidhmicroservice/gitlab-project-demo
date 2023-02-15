@@ -60,8 +60,9 @@ docker_build_push_job:
 
 deploy_job:
   stage: deploy
+  image: openjdk:17-alpine
   before_script:
-    - apt-get update && apt-get install  openssh-client
+    - apt-get update && apt-get install openssh-client
     - chmod 400 $SSH_LOCAL_PRIVATE_KEY
   script:
     - echo "Deploying gitlab-project-demo using docker"
