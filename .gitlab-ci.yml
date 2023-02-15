@@ -70,4 +70,6 @@ deploy_job:
   script:
     - echo "Deploying gitlab-project-demo using docker"
     - ssh -o StrictHostKeyChecking=no -i $SSH_LOCAL_PRIVATE_KEY root@143.110.186.86 "
+      docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD &&
+      docker ps -aq  | xargs docker stop | xargs docker rm &&
       docker run -d -p 8080:8080 $IMAGE_NAME:$IMAGE_TAG"
