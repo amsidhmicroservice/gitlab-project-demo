@@ -60,6 +60,9 @@ docker_build_push_job:
 
 deploy_job:
   stage: deploy
+  before_script:
+    - echo "Login to Digital Ocean Ubuntu machine using ssh secret key"
+    - ssh -i SSH_LOCAL_PRIVATE_KEY root@143.110.186.86
   script:
-    - echo "Pending deployment of gitlab-project-demo to OceanWorld"
-
+    - echo "Deploying gitlab-project-demo using docker"
+    - docker run -d -p 8080:8080 "$IMAGE_NAME:$IMAGE_TAG"
