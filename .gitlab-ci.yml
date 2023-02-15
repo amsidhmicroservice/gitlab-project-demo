@@ -60,7 +60,7 @@ docker_build_push_job:
 
 deploy_job:
   stage: deploy
-  image: openjdk:17-alpine
+  image: adoptopenjdk/openjdk14:alpine-slim
   before_script:
     - apt-get update && apt-get install openssh-client
     - chmod 400 $SSH_LOCAL_PRIVATE_KEY
