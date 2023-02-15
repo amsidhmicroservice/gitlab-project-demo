@@ -61,8 +61,13 @@ docker_build_push_job:
 deploy_job:
   stage: deploy
   before_script:
-    - echo "Login to Digital Ocean Ubuntu machine using ssh secret key"
-    - ssh -i $SSH_LOCAL_PRIVATE_KEY root@143.110.186.86
+    - sudo apt-get update
+    - sudo apt-get upgrade
+    - sudo apt-get install openssh-client
+    - chmod 400 $SSH_LOCAL_PRIVATE_KEY
   script:
     - echo "Deploying gitlab-project-demo using docker"
-    - docker run -d -p 8080:8080 "$IMAGE_NAME:$IMAGE_TAG"
+    - ssh -o StrictHostKeyChecking=no -i $SSH_LOCAL_PRIVATE_KEY root@143.110.186.86 "
+      docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD &&
+      docker ps -aq  | xargs docker stop | xargs docker rm &&
+      docker run -d -p 8080:8080 $IMAGE_NAME:$IMAGE_TAG"
