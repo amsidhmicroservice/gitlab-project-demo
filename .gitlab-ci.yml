@@ -4,8 +4,6 @@ variables:
   MAVEN_OPTS: -Dmaven.repo.local=.m2/repository
   IMAGE_NAME: amsidhmicroservice/gitlab-project-demo
   IMAGE_TAG: 0.0.1-SNAPSHOT
-  DEPLOYMENT_SERVER: 64.227.158.114
-  DEPLOYMNT_SERVER_USER: root
 
 stages:
   - build
@@ -71,7 +69,7 @@ deploy_job:
     - chmod 400 $SSH_LOCAL_PRIVATE_KEY
   script:
     - echo "Deploying gitlab-project-demo using docker"
-    - ssh -o StrictHostKeyChecking=no -i $SSH_LOCAL_PRIVATE_KEY $DEPLOYMNT_SERVER_USER@$64.227.158.114 "
+    - ssh -o StrictHostKeyChecking=no -i $SSH_LOCAL_PRIVATE_KEY root@64.227.158.114 "
       docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD &&
       docker ps -aq  | xargs docker stop | xargs docker rm &&
       docker run -d -p 8080:8080 $IMAGE_NAME:$IMAGE_TAG"
