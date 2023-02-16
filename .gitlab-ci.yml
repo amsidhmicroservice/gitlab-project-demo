@@ -71,11 +71,11 @@ deploy_job:
     - echo "Deploying gitlab-project-demo using docker"
     - ssh -o StrictHostKeyChecking=no -i $SSH_LOCAL_PRIVATE_KEY root@64.227.158.114 "
       docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD &&
-      #docker ps -aq  && xargs docker stop && xargs docker rm &&
-      if [ '$(docker ps -aq -f name=gitlab-project-demo)' ]; then
-      echo 'Already container found so deleting...'
-      docker stop gitlab-project-demo && docker rm gitlab-project-demo
-      echo 'Starting new container'
-      docker run -d -p 8080:8080 --name gitlab-project-demo $IMAGE_NAME:$IMAGE_TAG
+      if ! docker ps -a --format '{{.Names}}' | grep -w gitlab-project-demo &> /dev/null; then
+      echo 'gitlab-project-demo instance is not found so starting new one' &&
+      docker run --name gitlab-project-demo -d  -p 8080:8080 amsidhmicroservice/gitlab-project-demo:0.0.1-SNAPSHOT ;
+      else echo 'gitlab-project-demo instance already exists so deleting it and creating new one' &&
+      docker stop gitlab-project-demo | xargs docker rm &&
+      docker run --name gitlab-project-demo -d  -p 8080:8080 amsidhmicroservice/gitlab-project-demo:0.0.1-SNAPSHOT;
       fi"
 
