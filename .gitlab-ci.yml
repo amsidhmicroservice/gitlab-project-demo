@@ -78,4 +78,3 @@ deploy_job:
       docker stop gitlab-project-demo | xargs docker rm &&
       docker run --name gitlab-project-demo -d  -p 8080:8080 amsidhmicroservice/gitlab-project-demo:0.0.1-SNAPSHOT;
       fi"
-
