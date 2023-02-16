@@ -71,7 +71,7 @@ deploy_job:
     - chmod 400 $SSH_LOCAL_PRIVATE_KEY
   script:
     - echo "Deploying gitlab-project-demo using docker"
-    - ssh -o StrictHostKeyChecking=no -i $SSH_LOCAL_PRIVATE_KEY DEPLOYMNT_SERVER_USER@DEPLOYMNT_SERVER "
+    - ssh -o StrictHostKeyChecking=no -i $SSH_LOCAL_PRIVATE_KEY $DEPLOYMNT_SERVER_USER@$DEPLOYMNT_SERVER "
       docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD &&
       docker ps -aq  | xargs docker stop | xargs docker rm &&
       docker run -d -p 8080:8080 $IMAGE_NAME:$IMAGE_TAG"
